@@ -1,0 +1,1217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IAM Training LAB - Security Training Simulator</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #e4e8ec 100%);
+            min-height: 100vh;
+            color: #1a1a2e;
+        }
+
+        .container {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* Scoreboard Sidebar */
+        .scoreboard {
+            width: 280px;
+            background: linear-gradient(180deg, #1a1a2e 0%, #16213e 100%);
+            color: white;
+            padding: 24px;
+            position: fixed;
+            height: 100vh;
+            overflow-y: auto;
+        }
+
+        .scoreboard h2 {
+            font-size: 1.25rem;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .score-total {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: #4ade80;
+            margin: 16px 0;
+        }
+
+        .progress-bar {
+            height: 8px;
+            background: #334155;
+            border-radius: 4px;
+            overflow: hidden;
+            margin-bottom: 24px;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #4ade80, #22d3ee);
+            transition: width 0.5s ease;
+            border-radius: 4px;
+        }
+
+        .exploit-list {
+            list-style: none;
+        }
+
+        .exploit-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px;
+            margin-bottom: 8px;
+            background: rgba(255,255,255,0.05);
+            border-radius: 8px;
+            font-size: 0.875rem;
+            transition: all 0.3s ease;
+        }
+
+        .exploit-item.completed {
+            background: rgba(74, 222, 128, 0.15);
+            border-left: 3px solid #4ade80;
+        }
+
+        .exploit-item .points {
+            font-weight: bold;
+            color: #94a3b8;
+        }
+
+        .exploit-item.completed .points {
+            color: #4ade80;
+        }
+
+        .status-icon {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+        }
+
+        .status-icon.pending {
+            background: #334155;
+        }
+
+        .status-icon.done {
+            background: #4ade80;
+            color: #1a1a2e;
+        }
+
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            margin-left: 280px;
+            padding: 32px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 32px;
+            padding: 24px;
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
+        }
+
+        .header h1 {
+            font-size: 2rem;
+            color: #1a1a2e;
+            margin-bottom: 8px;
+        }
+
+        .header .subtitle {
+            color: #64748b;
+            font-size: 1rem;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 4px 12px;
+            background: #e0f2fe;
+            color: #0369a1;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            margin-top: 12px;
+        }
+
+        /* Sections */
+        .section {
+            background: white;
+            border-radius: 16px;
+            padding: 24px;
+            margin-bottom: 24px;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        .section.locked {
+            opacity: 0.6;
+            pointer-events: none;
+        }
+
+        .section.locked::after {
+            content: '🔒 Complete previous challenge to unlock';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(26, 26, 46, 0.95);
+            color: white;
+            padding: 16px 24px;
+            border-radius: 8px;
+            font-weight: 600;
+            z-index: 10;
+        }
+
+        .section.completed {
+            border-left: 4px solid #4ade80;
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+
+        .section-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .section-badge {
+            font-size: 0.7rem;
+            padding: 4px 8px;
+            background: #fef3c7;
+            color: #92400e;
+            border-radius: 4px;
+            font-weight: 600;
+        }
+
+        .teaches-box {
+            background: #f0fdf4;
+            border: 1px solid #bbf7d0;
+            border-radius: 8px;
+            padding: 12px;
+            margin-top: 16px;
+        }
+
+        .teaches-box h4 {
+            font-size: 0.75rem;
+            color: #166534;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .teaches-box ul {
+            list-style: none;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .teaches-box li {
+            background: #dcfce7;
+            color: #166534;
+            padding: 4px 10px;
+            border-radius: 4px;
+            font-size: 0.8rem;
+        }
+
+        /* Form Styles */
+        .form-group {
+            margin-bottom: 16px;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: 500;
+            margin-bottom: 6px;
+            color: #374151;
+        }
+
+        .form-group input, .form-group textarea {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid #e5e7eb;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: border-color 0.2s;
+        }
+
+        .form-group input:focus, .form-group textarea:focus {
+            outline: none;
+            border-color: #3b82f6;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #3b82f6, #2563eb);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.4);
+        }
+
+        .btn-danger {
+            background: linear-gradient(135deg, #ef4444, #dc2626);
+            color: white;
+        }
+
+        .btn-danger:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(239, 68, 68, 0.4);
+        }
+
+        .btn-success {
+            background: linear-gradient(135deg, #22c55e, #16a34a);
+            color: white;
+        }
+
+        .btn-warning {
+            background: linear-gradient(135deg, #f59e0b, #d97706);
+            color: white;
+        }
+
+        /* User Info */
+        .user-info {
+            background: #f8fafc;
+            border-radius: 8px;
+            padding: 16px;
+            margin-bottom: 16px;
+        }
+
+        .user-info .role {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #3b82f6;
+        }
+
+        .user-info.admin .role {
+            color: #dc2626;
+        }
+
+        .permissions {
+            margin-top: 12px;
+        }
+
+        .permission-item {
+            display: inline-block;
+            background: #e0f2fe;
+            color: #0369a1;
+            padding: 4px 12px;
+            border-radius: 4px;
+            margin: 4px;
+            font-size: 0.875rem;
+        }
+
+        /* Admin Panel */
+        .admin-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+            margin-top: 16px;
+        }
+
+        .admin-card {
+            background: linear-gradient(135deg, #1e293b, #334155);
+            color: white;
+            padding: 20px;
+            border-radius: 12px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .admin-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+        }
+
+        .admin-card .icon {
+            font-size: 2rem;
+            margin-bottom: 8px;
+        }
+
+        /* SoD Table */
+        .sod-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 16px 0;
+        }
+
+        .sod-table th, .sod-table td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .sod-table th {
+            background: #f8fafc;
+            font-weight: 600;
+        }
+
+        /* Alert */
+        .alert {
+            padding: 16px;
+            border-radius: 8px;
+            margin: 16px 0;
+            display: none;
+        }
+
+        .alert.success {
+            background: #dcfce7;
+            color: #166534;
+            border: 1px solid #86efac;
+        }
+
+        .alert.danger {
+            background: #fee2e2;
+            color: #991b1b;
+            border: 1px solid #fecaca;
+        }
+
+        .alert.warning {
+            background: #fef3c7;
+            color: #92400e;
+            border: 1px solid #fcd34d;
+        }
+
+        .alert.show {
+            display: block;
+            animation: slideIn 0.3s ease;
+        }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Hints */
+        .hint-toggle {
+            background: #f1f5f9;
+            border: 1px solid #cbd5e1;
+            padding: 8px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.875rem;
+            color: #64748b;
+        }
+
+        .hint-toggle:hover {
+            background: #e2e8f0;
+        }
+
+        .hints-container {
+            display: none;
+            margin-top: 12px;
+            padding: 12px;
+            background: #fffbeb;
+            border: 1px solid #fde68a;
+            border-radius: 8px;
+        }
+
+        .hints-container.show {
+            display: block;
+        }
+
+        .hint {
+            padding: 8px;
+            margin: 4px 0;
+            background: white;
+            border-radius: 4px;
+            font-size: 0.875rem;
+            color: #92400e;
+        }
+
+        /* Celebration */
+        .celebration {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.8);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+
+        .celebration.show {
+            display: flex;
+        }
+
+        .celebration-content {
+            background: white;
+            padding: 48px;
+            border-radius: 24px;
+            text-align: center;
+            max-width: 500px;
+        }
+
+        .celebration-content h2 {
+            font-size: 2rem;
+            color: #16a34a;
+            margin-bottom: 16px;
+        }
+
+        .celebration-content .trophy {
+            font-size: 4rem;
+            margin-bottom: 16px;
+        }
+
+        /* Summary Section */
+        .summary-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 16px;
+            margin-top: 16px;
+        }
+
+        .summary-card {
+            background: #f8fafc;
+            padding: 16px;
+            border-radius: 8px;
+            border-left: 4px solid #3b82f6;
+        }
+
+        .summary-card h4 {
+            color: #1e40af;
+            margin-bottom: 8px;
+        }
+
+        .summary-card p {
+            font-size: 0.875rem;
+            color: #64748b;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .scoreboard {
+                position: relative;
+                width: 100%;
+                height: auto;
+            }
+            .main-content {
+                margin-left: 0;
+            }
+            .container {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 
+    ╔════════════════════════════════════════════════════════════╗
+    ║  IAM TRAINING LAB - SECURITY VULNERABILITIES AHEAD!        ║
+    ║                                                            ║
+    ║  🔐 test user: john / password: welcome123                 ║
+    ║                                                            ║
+    ║  This is an intentionally vulnerable application for       ║
+    ║  educational purposes only. DO NOT use these patterns      ║
+    ║  in production applications!                               ║
+    ╚════════════════════════════════════════════════════════════╝
+    -->
+
+    <div class="container">
+        <!-- Scoreboard Sidebar -->
+        <aside class="scoreboard">
+            <h2>🏆 Scoreboard</h2>
+            <div class="score-total" id="totalScore">0 / 110</div>
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressBar" style="width: 0%"></div>
+            </div>
+            <ul class="exploit-list">
+                <li class="exploit-item" id="exploit-login">
+                    <span><span class="status-icon pending" id="status-login">○</span> Found login credentials</span>
+                    <span class="points">+10</span>
+                </li>
+                <li class="exploit-item" id="exploit-admin">
+                    <span><span class="status-icon pending" id="status-admin">○</span> Became admin</span>
+                    <span class="points">+20</span>
+                </li>
+                <li class="exploit-item" id="exploit-sod">
+                    <span><span class="status-icon pending" id="status-sod">○</span> SoD violation</span>
+                    <span class="points">+20</span>
+                </li>
+                <li class="exploit-item" id="exploit-privilege">
+                    <span><span class="status-icon pending" id="status-privilege">○</span> Accessed sensitive data</span>
+                    <span class="points">+15</span>
+                </li>
+                <li class="exploit-item" id="exploit-iga">
+                    <span><span class="status-icon pending" id="status-iga">○</span> Bypassed IGA</span>
+                    <span class="points">+15</span>
+                </li>
+                <li class="exploit-item" id="exploit-secrets">
+                    <span><span class="status-icon pending" id="status-secrets">○</span> Found DB password</span>
+                    <span class="points">+30</span>
+                </li>
+            </ul>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <header class="header">
+                <h1>🏢 IAM Training LAB</h1>
+                <p class="subtitle">Learn Identity & Access Management Security Through Hands-On Exploitation</p>
+                <span class="badge">🎓 Educational Purpose Only</span>
+            </header>
+
+            <!-- Section 1: Login -->
+            <section class="section" id="section-login">
+                <div class="section-header">
+                    <h2 class="section-title">🔐 Challenge 1: Authentication</h2>
+                    <span class="section-badge">+10 Points</span>
+                </div>
+                <p>Welcome to SecureCorp™ Employee Portal. Please log in to continue.</p>
+                
+                <div id="loginForm" style="margin-top: 20px;">
+                    <div class="form-group">
+                        <label>Username</label>
+                        <input type="text" id="username" placeholder="Enter username">
+                    </div>
+                    <div class="form-group">
+                        <label>Password</label>
+                        <input type="password" id="password" placeholder="Enter password">
+                    </div>
+                    <button class="btn btn-primary" onclick="attemptLogin()">Login</button>
+                    <div class="alert danger" id="loginError">Invalid credentials! Try harder... 🤔</div>
+                    <div class="alert success" id="loginSuccess">✅ Login successful! Welcome back!</div>
+                </div>
+
+                <button class="hint-toggle" onclick="toggleHints('hints-login')">💡 Need a hint?</button>
+                <div class="hints-container" id="hints-login">
+                    <div class="hint">🔍 Hint 1: Developers sometimes leave helpful comments in the source code...</div>
+                    <div class="hint">🔍 Hint 2: Try pressing Ctrl+U or right-click → View Page Source</div>
+                </div>
+
+                <div class="teaches-box">
+                    <h4>🎓 This teaches</h4>
+                    <ul>
+                        <li>❌ Hardcoded credentials</li>
+                        <li>❌ Password leakage</li>
+                        <li>❌ Authentication weakness</li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- Section 2: User Dashboard -->
+            <section class="section locked" id="section-dashboard">
+                <div class="section-header">
+                    <h2 class="section-title">👤 Challenge 2: Authorization Bypass</h2>
+                    <span class="section-badge">+20 Points</span>
+                </div>
+                
+                <div class="user-info" id="userInfoPanel">
+                    <p>Logged in as: <strong id="currentUser">john</strong></p>
+                    <p class="role">Role: <span id="currentRole">USER</span> - Employee</p>
+                    <div class="permissions">
+                        <span class="permission-item">✓ View Profile</span>
+                        <span class="permission-item">✓ Request Access</span>
+                        <span class="permission-item" id="adminPermission" style="display:none; background: #fee2e2; color: #991b1b;">★ Admin Panel</span>
+                    </div>
+                </div>
+
+                <div class="alert warning" id="adminUnlocked" style="display:none;">
+                    ⚠️ Admin privileges detected! Admin Panel is now accessible!
+                </div>
+
+                <button class="btn btn-primary" id="accessAdminBtn" style="display:none;" onclick="accessAdminPanel()">
+                    🔓 Access Admin Panel
+                </button>
+
+                <button class="hint-toggle" onclick="toggleHints('hints-dashboard')">💡 Need a hint?</button>
+                <div class="hints-container" id="hints-dashboard">
+                    <div class="hint">🔍 Hint 1: Open DevTools (F12) and look at the Console tab...</div>
+                    <div class="hint">🔍 Hint 2: There's a variable called 'role' - can you change it to 'admin'?</div>
+                    <div class="hint">🔍 Hint 3: Type: role = "admin"; checkAdminAccess();</div>
+                </div>
+
+                <div class="teaches-box">
+                    <h4>🎓 This teaches</h4>
+                    <ul>
+                        <li>❌ Client-side authorization</li>
+                        <li>❌ Broken access control</li>
+                        <li>❌ Trusting the frontend</li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- Section 3: Admin Panel -->
+            <section class="section locked" id="section-admin">
+                <div class="section-header">
+                    <h2 class="section-title">⚙️ Challenge 3: Admin Panel Access</h2>
+                    <span class="section-badge">Unlocked via role change</span>
+                </div>
+
+                <div class="alert success show">
+                    🎉 Congratulations! You've accessed the Admin Panel through client-side manipulation!
+                </div>
+
+                <div class="admin-grid">
+                    <div class="admin-card" onclick="showAdminFeature('users')">
+                        <div class="icon">👥</div>
+                        <div>View All Users</div>
+                    </div>
+                    <div class="admin-card" onclick="showAdminFeature('approve')">
+                        <div class="icon">✅</div>
+                        <div>Approve Access</div>
+                    </div>
+                    <div class="admin-card" onclick="showAdminFeature('create')">
+                        <div class="icon">➕</div>
+                        <div>Create Accounts</div>
+                    </div>
+                    <div class="admin-card" onclick="showAdminFeature('secrets')">
+                        <div class="icon">🔥</div>
+                        <div>View Secrets</div>
+                    </div>
+                </div>
+
+                <div id="adminOutput" class="alert success" style="margin-top: 16px;"></div>
+
+                <div class="teaches-box">
+                    <h4>🎓 This teaches</h4>
+                    <ul>
+                        <li>❌ Missing server-side authorization</li>
+                        <li>❌ Direct URL access vulnerability</li>
+                        <li>❌ Frontend-only access control</li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- Section 4: SoD Violation -->
+            <section class="section locked" id="section-sod">
+                <div class="section-header">
+                    <h2 class="section-title">⚖️ Challenge 4: Segregation of Duties</h2>
+                    <span class="section-badge">+20 Points</span>
+                </div>
+
+                <p>In a proper system, the same person should NOT be able to both request AND approve transactions.</p>
+
+                <table class="sod-table">
+                    <thead>
+                        <tr>
+                            <th>Role</th>
+                            <th>Permission</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Requester</td>
+                            <td>Request Payment</td>
+                            <td id="requesterStatus">—</td>
+                        </tr>
+                        <tr>
+                            <td>Approver</td>
+                            <td>Approve Payment</td>
+                            <td id="approverStatus">—</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div style="display: flex; gap: 16px; margin-top: 16px;">
+                    <button class="btn btn-warning" onclick="requestPayment()">💰 Request ₹10,00,000</button>
+                    <button class="btn btn-success" id="approveBtn" onclick="approvePayment()" disabled>✅ Approve My Own Request</button>
+                </div>
+
+                <div class="alert danger" id="sodViolation">
+                    ⚠️ SoD VIOLATION DETECTED! Same user requested AND approved the transaction!
+                </div>
+
+                <button class="hint-toggle" onclick="toggleHints('hints-sod')">💡 Need a hint?</button>
+                <div class="hints-container" id="hints-sod">
+                    <div class="hint">🔍 Hint 1: First request a payment, then try to approve it yourself...</div>
+                    <div class="hint">🔍 Hint 2: A real system would block self-approval. This one doesn't!</div>
+                </div>
+
+                <div class="teaches-box">
+                    <h4>🎓 This teaches</h4>
+                    <ul>
+                        <li>❌ SoD violation</li>
+                        <li>❌ Governance failure</li>
+                        <li>❌ Audit risk</li>
+                        <li>❌ Fraud vulnerability</li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- Section 5: Least Privilege -->
+            <section class="section locked" id="section-privilege">
+                <div class="section-header">
+                    <h2 class="section-title">🔓 Challenge 5: Least Privilege Violation</h2>
+                    <span class="section-badge">+15 Points</span>
+                </div>
+
+                <p>Even as a regular employee, you seem to have access to some... interesting data.</p>
+
+                <div class="admin-grid" style="margin-top: 16px;">
+                    <div class="admin-card" style="background: linear-gradient(135deg, #dc2626, #b91c1c);" onclick="downloadSalaryDB()">
+                        <div class="icon">📊</div>
+                        <div>Download Salary DB</div>
+                    </div>
+                    <div class="admin-card" style="background: linear-gradient(135deg, #dc2626, #b91c1c);" onclick="viewAllPasswords()">
+                        <div class="icon">🔑</div>
+                        <div>View All Passwords</div>
+                    </div>
+                </div>
+
+                <div class="alert danger" id="privilegeAbuse"></div>
+
+                <div class="teaches-box">
+                    <h4>🎓 This teaches</h4>
+                    <ul>
+                        <li>❌ Over-privileged accounts</li>
+                        <li>❌ No least privilege principle</li>
+                        <li>❌ Excessive permissions</li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- Section 6: IGA Simulation -->
+            <section class="section locked" id="section-iga">
+                <div class="section-header">
+                    <h2 class="section-title">📋 Challenge 6: IGA Governance Bypass</h2>
+                    <span class="section-badge">+15 Points</span>
+                </div>
+
+                <p>Use our Access Request System to request elevated privileges.</p>
+
+                <div style="background: #f8fafc; padding: 20px; border-radius: 8px; margin-top: 16px;">
+                    <h3 style="margin-bottom: 16px;">🎫 Access Request Form</h3>
+                    <div class="form-group">
+                        <label>Request Role</label>
+                        <input type="text" value="Super Admin" readonly style="background: #e5e7eb;">
+                    </div>
+                    <div class="form-group">
+                        <label>Business Justification</label>
+                        <textarea id="igaReason" rows="3" placeholder="Enter your reason..."></textarea>
+                    </div>
+                    <button class="btn btn-primary" onclick="submitIGARequest()">Submit Request</button>
+                </div>
+
+                <div class="alert success" id="igaApproved">
+                    ✅ AUTO-APPROVED! 😂 No manager review required!<br>
+                    <small>Your Super Admin access is now active.</small>
+                </div>
+
+                <button class="hint-toggle" onclick="toggleHints('hints-iga')">💡 Need a hint?</button>
+                <div class="hints-container" id="hints-iga">
+                    <div class="hint">🔍 Hint 1: Just submit the form - there's no approval workflow!</div>
+                    <div class="hint">🔍 Hint 2: Real IGA systems require manager approval and periodic certification.</div>
+                </div>
+
+                <div class="teaches-box">
+                    <h4>🎓 This teaches</h4>
+                    <ul>
+                        <li>❌ No approval workflow</li>
+                        <li>❌ No access certification</li>
+                        <li>❌ Governance failure</li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- Section 7: Secrets Challenge -->
+            <section class="section locked" id="section-secrets">
+                <div class="section-header">
+                    <h2 class="section-title">🔎 Final Challenge: Find the Secret</h2>
+                    <span class="section-badge">+30 Points</span>
+                </div>
+
+                <p><strong>Mission:</strong> Find the production database password hidden in this page - without using any hacking tools!</p>
+
+                <div style="background: #0f172a; color: #22d3ee; padding: 20px; border-radius: 8px; font-family: monospace; margin: 16px 0;">
+                    <p>🖥️ Connection String (partial):</p>
+                    <p>Host: db.securecorp.internal</p>
+                    <p>Port: 5432</p>
+                    <p>Database: production_main</p>
+                    <p>User: db_admin</p>
+                    <p>Password: ************</p>
+                </div>
+
+                <div class="form-group">
+                    <label>Enter the secret password you found:</label>
+                    <input type="text" id="secretInput" placeholder="Enter the password...">
+                </div>
+                <button class="btn btn-primary" onclick="checkSecret()">Submit Answer</button>
+
+                <div class="alert success" id="secretSuccess">
+                    🎉 Correct! You found the hardcoded secret!
+                </div>
+                <div class="alert danger" id="secretError">
+                    ❌ That's not it. Keep looking in the source code...
+                </div>
+
+                <button class="hint-toggle" onclick="toggleHints('hints-secrets')">💡 Need a hint?</button>
+                <div class="hints-container" id="hints-secrets">
+                    <div class="hint">🔍 Hint 1: View the page source (Ctrl+U) or inspect the JavaScript...</div>
+                    <div class="hint">🔍 Hint 2: Search for "dbPassword" or "ProdDB" in the source</div>
+                </div>
+
+                <div class="teaches-box">
+                    <h4>🎓 This teaches</h4>
+                    <ul>
+                        <li>❌ Secrets in source code</li>
+                        <li>❌ DevSecOps failure</li>
+                        <li>❌ Credential exposure</li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- Section 8: Summary (Final) -->
+            <section class="section locked" id="section-summary">
+                <div class="section-header">
+                    <h2 class="section-title">🎓 Training Complete!</h2>
+                </div>
+
+                <div class="summary-grid">
+                    <div class="summary-card">
+                        <h4>🔐 Authentication</h4>
+                        <p>Never hardcode credentials. Use secure authentication systems and store secrets in environment variables or vaults.</p>
+                    </div>
+                    <div class="summary-card">
+                        <h4>🛡️ Authorization</h4>
+                        <p>Always validate permissions server-side. Never trust client-side role checks.</p>
+                    </div>
+                    <div class="summary-card">
+                        <h4>⚖️ Segregation of Duties</h4>
+                        <p>Critical operations should require multiple approvers. No single person should control an entire process.</p>
+                    </div>
+                    <div class="summary-card">
+                        <h4>📉 Least Privilege</h4>
+                        <p>Grant minimum permissions needed. Regularly audit and revoke unnecessary access.</p>
+                    </div>
+                    <div class="summary-card">
+                        <h4>📋 IGA Governance</h4>
+                        <p>Implement proper approval workflows and periodic access certifications.</p>
+                    </div>
+                    <div class="summary-card">
+                        <h4>🔑 Secret Management</h4>
+                        <p>Use secret managers (HashiCorp Vault, AWS Secrets Manager). Never commit secrets to code.</p>
+                    </div>
+                </div>
+
+                <div style="text-align: center; margin-top: 32px; padding: 24px; background: linear-gradient(135deg, #4ade80, #22d3ee); border-radius: 16px; color: #1a1a2e;">
+                    <h2>🏆 Congratulations!</h2>
+                    <p style="font-size: 1.25rem; margin-top: 8px;">You've completed the IAM Security Training!</p>
+                    <p style="font-size: 2rem; font-weight: bold; margin-top: 16px;" id="finalScore">Score: 110 / 110</p>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- Celebration Modal -->
+    <div class="celebration" id="celebration">
+        <div class="celebration-content">
+            <div class="trophy">🏆</div>
+            <h2>Training Complete!</h2>
+            <p>You've successfully exploited all IAM vulnerabilities and learned critical security concepts!</p>
+            <p style="margin-top: 16px; font-size: 1.5rem; font-weight: bold; color: #16a34a;" id="celebrationScore"></p>
+            <button class="btn btn-primary" style="margin-top: 24px;" onclick="closeCelebration()">View Summary</button>
+        </div>
+    </div>
+
+    <script>
+        // ═══════════════════════════════════════════════════════════════
+        // 🔴 INTENTIONALLY VULNERABLE CODE - FOR EDUCATIONAL PURPOSES ONLY
+        // ═══════════════════════════════════════════════════════════════
+
+        // ❌ VULNERABILITY: Client-side role variable that can be modified
+        var role = "user";
+        
+        // ❌ VULNERABILITY: Hardcoded database password
+        const dbPassword = "ProdDB@123";
+        
+        // ❌ VULNERABILITY: Hardcoded API key
+        const apiKey = "sk-secret-api-key-12345";
+
+        // Score tracking
+        let score = 0;
+        const exploits = {
+            login: { found: false, points: 10 },
+            admin: { found: false, points: 20 },
+            sod: { found: false, points: 20 },
+            privilege: { found: false, points: 15 },
+            iga: { found: false, points: 15 },
+            secrets: { found: false, points: 30 }
+        };
+
+        // State tracking
+        let paymentRequested = false;
+        let isLoggedIn = false;
+
+        // ═══════════════════════════════════════════════════════════════
+        // SCORING SYSTEM
+        // ═══════════════════════════════════════════════════════════════
+
+        function awardPoints(exploitName) {
+            if (!exploits[exploitName].found) {
+                exploits[exploitName].found = true;
+                score += exploits[exploitName].points;
+                updateScoreboard();
+                
+                // Mark exploit as completed in UI
+                document.getElementById(`exploit-${exploitName}`).classList.add('completed');
+                document.getElementById(`status-${exploitName}`).innerHTML = '✓';
+                document.getElementById(`status-${exploitName}`).classList.remove('pending');
+                document.getElementById(`status-${exploitName}`).classList.add('done');
+
+                // Check for completion
+                if (score === 110) {
+                    showCelebration();
+                }
+            }
+        }
+
+        function updateScoreboard() {
+            document.getElementById('totalScore').textContent = `${score} / 110`;
+            document.getElementById('progressBar').style.width = `${(score / 110) * 100}%`;
+        }
+
+        // ═══════════════════════════════════════════════════════════════
+        // SECTION UNLOCKING
+        // ═══════════════════════════════════════════════════════════════
+
+        function unlockSection(sectionId) {
+            const section = document.getElementById(sectionId);
+            section.classList.remove('locked');
+            section.classList.add('completed');
+            section.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+
+        // ═══════════════════════════════════════════════════════════════
+        // CHALLENGE 1: LOGIN
+        // ═══════════════════════════════════════════════════════════════
+
+        function attemptLogin() {
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+
+            // ❌ VULNERABILITY: Checking against hardcoded credentials
+            if (username === 'john' && password === 'welcome123') {
+                document.getElementById('loginError').classList.remove('show');
+                document.getElementById('loginSuccess').classList.add('show');
+                document.getElementById('loginForm').style.opacity = '0.5';
+                document.getElementById('section-login').classList.add('completed');
+                
+                isLoggedIn = true;
+                awardPoints('login');
+                
+                setTimeout(() => {
+                    unlockSection('section-dashboard');
+                }, 1000);
+            } else {
+                document.getElementById('loginError').classList.add('show');
+                document.getElementById('loginSuccess').classList.remove('show');
+            }
+        }
+
+        // ═══════════════════════════════════════════════════════════════
+        // CHALLENGE 2: ADMIN ROLE BYPASS
+        // ═══════════════════════════════════════════════════════════════
+
+        // This function is intentionally exposed for students to call
+        function checkAdminAccess() {
+            if (role === 'admin') {
+                document.getElementById('currentRole').textContent = 'ADMIN';
+                document.getElementById('userInfoPanel').classList.add('admin');
+                document.getElementById('adminPermission').style.display = 'inline';
+                document.getElementById('adminUnlocked').style.display = 'block';
+                document.getElementById('accessAdminBtn').style.display = 'inline-block';
+                
+                awardPoints('admin');
+            }
+        }
+
+        // Check for role changes periodically (for detection)
+        setInterval(() => {
+            if (role === 'admin' && isLoggedIn && !exploits.admin.found) {
+                checkAdminAccess();
+            }
+        }, 500);
+
+        function accessAdminPanel() {
+            unlockSection('section-admin');
+            setTimeout(() => {
+                unlockSection('section-sod');
+            }, 500);
+        }
+
+        function showAdminFeature(feature) {
+            const output = document.getElementById('adminOutput');
+            const messages = {
+                users: '👥 All Users: john, admin, sarah, mike, root (5 users)',
+                approve: '✅ Access requests: 12 pending approvals',
+                create: '➕ Account creation panel loaded',
+                secrets: '🔥 API Keys:\n- AWS: AKIA...XYZ\n- Stripe: sk_live_...\n- Database: [REDACTED]'
+            };
+            output.textContent = messages[feature];
+            output.classList.add('show');
+        }
+
+        // ═══════════════════════════════════════════════════════════════
+        // CHALLENGE 4: SoD VIOLATION
+        // ═══════════════════════════════════════════════════════════════
+
+        function requestPayment() {
+            paymentRequested = true;
+            document.getElementById('requesterStatus').innerHTML = '✅ Requested by: john';
+            document.getElementById('approveBtn').disabled = false;
+        }
+
+        function approvePayment() {
+            if (paymentRequested) {
+                document.getElementById('approverStatus').innerHTML = '✅ Approved by: john';
+                document.getElementById('sodViolation').classList.add('show');
+                document.getElementById('section-sod').classList.add('completed');
+                
+                awardPoints('sod');
+                
+                setTimeout(() => {
+                    unlockSection('section-privilege');
+                }, 1000);
+            }
+        }
+
+        // ═══════════════════════════════════════════════════════════════
+        // CHALLENGE 5: LEAST PRIVILEGE
+        // ═══════════════════════════════════════════════════════════════
+
+        function downloadSalaryDB() {
+            const output = document.getElementById('privilegeAbuse');
+            output.innerHTML = '📊 Downloading... salary_database_2024.xlsx<br>Contents: All employee salaries, SSNs, bank accounts<br><strong>⚠️ You shouldn\'t have access to this!</strong>';
+            output.classList.add('show');
+            
+            if (!exploits.privilege.found) {
+                awardPoints('privilege');
+                document.getElementById('section-privilege').classList.add('completed');
+                setTimeout(() => {
+                    unlockSection('section-iga');
+                }, 1000);
+            }
+        }
+
+        function viewAllPasswords() {
+            const output = document.getElementById('privilegeAbuse');
+            output.innerHTML = '🔑 Password Vault Access:<br>- CEO: C3O@SecurePass!<br>- CTO: Th3B0ss2024<br>- Admin: admin123<br><strong>⚠️ Major security violation!</strong>';
+            output.classList.add('show');
+            
+            if (!exploits.privilege.found) {
+                awardPoints('privilege');
+                document.getElementById('section-privilege').classList.add('completed');
+                setTimeout(() => {
+                    unlockSection('section-iga');
+                }, 1000);
+            }
+        }
+
+        // ═══════════════════════════════════════════════════════════════
+        // CHALLENGE 6: IGA BYPASS
+        // ═══════════════════════════════════════════════════════════════
+
+        function submitIGARequest() {
+            // ❌ VULNERABILITY: Auto-approval without any workflow
+            document.getElementById('igaApproved').classList.add('show');
+            document.getElementById('section-iga').classList.add('completed');
+            
+            awardPoints('iga');
+            
+            setTimeout(() => {
+                unlockSection('section-secrets');
+            }, 1000);
+        }
+
+        // ═══════════════════════════════════════════════════════════════
+        // CHALLENGE 7: SECRETS
+        // ═══════════════════════════════════════════════════════════════
+
+        function checkSecret() {
+            const input = document.getElementById('secretInput').value;
+            
+            if (input === dbPassword || input === 'ProdDB@123') {
+                document.getElementById('secretSuccess').classList.add('show');
+                document.getElementById('secretError').classList.remove('show');
+                document.getElementById('section-secrets').classList.add('completed');
+                
+                awardPoints('secrets');
+                
+                setTimeout(() => {
+                    unlockSection('section-summary');
+                    document.getElementById('finalScore').textContent = `Score: ${score} / 110`;
+                }, 1000);
+            } else {
+                document.getElementById('secretError').classList.add('show');
+                document.getElementById('secretSuccess').classList.remove('show');
+            }
+        }
+
+        // ═══════════════════════════════════════════════════════════════
+        // HINTS SYSTEM
+        // ═══════════════════════════════════════════════════════════════
+
+        function toggleHints(hintsId) {
+            const hints = document.getElementById(hintsId);
+            hints.classList.toggle('show');
+        }
+
+        // ═══════════════════════════════════════════════════════════════
+        // CELEBRATION
+        // ═══════════════════════════════════════════════════════════════
+
+        function showCelebration() {
+            document.getElementById('celebrationScore').textContent = `Final Score: ${score} / 110`;
+            document.getElementById('celebration').classList.add('show');
+        }
+
+        function closeCelebration() {
+            document.getElementById('celebration').classList.remove('show');
+            unlockSection('section-summary');
+            document.getElementById('finalScore').textContent = `Score: ${score} / 110`;
+        }
+
+        // ═══════════════════════════════════════════════════════════════
+        // CONSOLE HINTS FOR STUDENTS
+        // ═══════════════════════════════════════════════════════════════
+
+        console.log('%c🏢 IAM Training LAB', 'font-size: 24px; font-weight: bold; color: #3b82f6;');
+        console.log('%c⚠️ Welcome, security trainee!', 'font-size: 14px; color: #f59e0b;');
+        console.log('%cLook around... there might be some interesting variables here 👀', 'font-size: 12px; color: #64748b;');
+        console.log('%cTry typing: role', 'font-size: 12px; color: #22c55e;');
+    </script>
+</body>
+</html>
