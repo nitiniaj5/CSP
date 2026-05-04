@@ -1,0 +1,208 @@
+Analyze following details of a game and create a simple HTML - interactive website for this
+
+IAM Tabletop Challenge: The Governance Game
+
+Game Overview and Objective
+Welcome to The Governance Game. In this simulation, you are tasked with orchestrating Identity and Access Governance (IAG) across the complex landscape of a modern enterprise user lifecycle.
+
+Core Purpose: To simulate the real-world coordination required between operational, architectural, and audit teams to ensure that the organization remains secure and compliant.
+
+The Mission: Your primary goal is to ensure that the right individuals have access to the right resources, at the right times, and for the right reasons.
+
+The Three Pillars of Success:
+
+Identity Management: Managing the digital identity lifecycle from creation to exit.
+
+Access Control: Implementing robust authentication (MFA) and authorization (RBAC).
+
+Governance: The policy-based orchestration of identities and auditing of access to support Enterprise Security & Risk Management (ESRM).
+
+Team Definitions and Roles
+Participants are divided into three functional units. Collaboration is mandatory; a failure in one department creates a security gap across the entire enterprise.
+
+Team
+
+Role
+
+Primary Responsibilities
+
+Team 1
+
+The Operators (Lifecycle & Provisioning)
+
+Execute JML (Joiner, Mover, Leaver) flows, manage Birthright Access, and handle account de-provisioning.
+
+The Architects (Identity & Directory Services)
+
+Maintain the Directory Information Tree (DIT), configure SSO (SAML), and ensure High Availability via replication.
+
+Team 3
+
+The Auditors (Governance & Risk)
+
+Conduct access recertification, define Segregation of Duties (SoD), and monitor the Access Warehouse.
+
+Phase 1: The Joiner & Birthright Challenge
+Scenario: Immediate Action Required! A new member has just joined the Finance Team. To ensure productivity on Day 1, the user must be provisioned without manual overhead.
+
+Task 1: Define Birthright Access (Team 1) Consult the organizational standard and identify the specific access entitlements for this new Finance Role.
+
+Challenge: List four "All Employee" entitlements and two "Finance-Specific" entitlements that must be provisioned automatically.
+
+Task 2: Joiner Process Sequence (Team 1) The following steps in the Joiner Flow are scrambled. Correctly sequence them to prevent a "ghost account" or an unapproved access incident:
+
+A. IT: Performs Account Creation.
+
+B. HR: Submits the Onboarding Request.
+
+C. IAM System: Executes Access Provisioning.
+
+D. HR: Sends the Welcome Communication to the new hire.
+
+E. Manager: Provides Approval for the request.
+
+Task 3: MFA Architecture (Team 2) The user identity has been created in the DIT, but security protocols require Multi-Factor Authentication. Categorize the following icons from the standard MFA catalog into their correct factors:
+
+Factor 1: Knowledge (Something you know) — [Identify 2 items]
+
+Factor 2: Possession (Something you have) — [Identify 2 items]
+
+Factor 3: Inherence (Something you are) — [Identify 2 items]
+
+Task 4: The Directory Key (Team 2) To finalize the account, define a sample Distinguished Name (DN) for this user.
+
+Challenge: Explain why the DN serves as the primary key in the Directory Information Tree (DIT).
+
+Phase 2: The Access & Authentication Challenge
+Scenario: The organization is deploying Workday and ServiceNow as cloud applications. High availability is non-negotiable, and users require seamless access.
+
+Task 1: Replication Strategy (Team 2) The organization uses a multi-node, load-balanced application where traffic can route to any instance at any time.
+
+Mandatory Decision: Choose between Master-Master and Master-Slave replication. Justify your choice based on the fail-over requirements.
+
+Task 2: SP-Initiated SAML Flow (Team 2) Sequence the following steps for a Service Provider (SP) Initiated SSO flow. You must correctly place the SAML Request and SAML Response within the sequence:
+
+A. User Browser: Receives Redirect to target service.
+
+B. Service Provider: Sends Redirect and SAML Request to the Identity Provider (IdP).
+
+C. User Browser: Requests access to a service (e.g., Workday).
+
+D. IdP: Authenticates the user and sends SAML Response to the Service Provider.
+
+E. IdP: Presents a login form to the user.
+
+F. Service Provider: Grants access to the service.
+
+Task 3: Helpdesk Optimization (Team 1 & 2) The helpdesk is overwhelmed by password reset tickets.
+
+Challenge: Sequence the 4 steps of the Self-Service Password Reset (SSPR) process.
+
+Analysis: How does this process impact "User Productivity" and "Helpdesk Load"?
+
+Phase 3: The Governance & Leaver Challenge
+Scenario: A high-level employee has resigned. Simultaneously, a compliance audit is triggered for all users with high-privilege access.
+
+Task 1: Termination Protocol (Team 1) Initiate the "Leaver" flow.
+
+Action: Define the difference between De-provisioning access and performing Reconciliation between the managed resource and the Identity Manager Server.
+
+Task 2: The Governance Wheel (Team 3) An audit is flagged for a potential Segregation of Duties (SoD) violation.
+
+Challenge: Select the four specific nodes from the Identity & Access Governance Wheel (Slide 5) that your team must use to investigate and resolve this violation.
+
+Task 3: The Process Assembler Logic (All Teams) A user is requesting access to a high-privilege system via Self-Service.
+
+Logic Puzzle: Using the "Process Assembler" concept, describe the logic flow:
+
+What is the trigger?
+
+If the user role is entitled to the access, what is the outcome?
+
+If the user role is not entitled, what specific "Risk-based" decision point must be triggered before access is granted?
+
+Scoring Rubric
+Category
+
+Scoring Criteria
+
+Points
+
+Operational Precision
+
+Correct sequencing of JML flows; accurate identification of Finance birthright access.
+
+25
+
+Technical Architecture
+
+Correct SAML Request/Response placement; mandatory selection of Master-Master replication.
+
+25
+
+Compliance & Risk
+
+Selection of relevant IAG Wheel nodes; correct application of Process Assembler logic.
+
+25
+
+User Productivity
+
+Implementation of SSPR flow and identification of helpdesk load reduction benefits.
+
+25
+
+Master Glossary for Participants
+Term
+
+Definition
+
+IAG
+
+Identity and Access Governance: Policy-based orchestration of user identity management and access control.
+
+LDAP
+
+Lightweight Directory Access Protocol: The communication protocol for accessing Directory Services.
+
+DIT
+
+Directory Information Tree: The hierarchical structure where directory data (user, network, server) is stored.
+
+DN
+
+Distinguished Name: The unique identifier (primary key) for an entry in the directory.
+
+RBAC
+
+Role-Based Access Control: Managing system access based on job roles rather than individual assignments.
+
+SAML
+
+Security Assertion Markup Language: An XML-based standard for exchanging authentication/authorization data.
+
+MFA
+
+Multi-Factor Authentication: Verification requiring Knowledge (Password), Possession (Token), or Inherence (Biometric).
+
+Birthright Access
+
+Default permissions automatically granted on Day 1 based on role, department, or location.
+
+Search Speed: LDAP is highly optimized for high-volume Search/Lookup operations. Relational databases are significantly slower and more resource-intensive for lookups. Write Speed: LDAP Write operations are slower than RDBMS. Replication: LDAP supports faster replication with secondary directory services, ensuring High Availabilit
+
+Details
+
+Preview
+Built an interactive Governance Game with three phases (Joiner/Birthright, Access/SAML, Governance/Leaver), drag-to-reorder sequences, MFA categorization, Process Assembler logic, and a 100-point scorecard against the rubric.
+
+Add Hint system - show answer explanations - option to save and resume progress
+Add a progress bar and checklist showing which tasks are completed and which are still in progress.
+Added mission progress UI
+Added a Mission Progress card with an overall completion bar and per-phase checklists showing complete (✓), in-progress (◉), and not-started (○) states for all 9 tasks.
+
+
+
+
+
+
