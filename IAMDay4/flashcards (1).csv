@@ -1,0 +1,80 @@
+What was the primary cause of the widespread Snowflake data breach in April 2026?,The absence of Multi-Factor Authentication (MFA) on compromised accounts.
+"In early 2026, which region experienced a wave of 600,000 daily cyber attacks targeting utilities and finance?",The United Arab Emirates and the Gulf region.
+The 2026 theft of 10 petabytes of data from a Chinese supercomputer included research on which sector?,Defence research and classified scientific information.
+Which crypto infrastructure company reported a $290 million theft linked to North Korea in April 2026?,Kelp DAO.
+The January 2026 Navia breach exposed the personal data of how many individuals?,2.7 million people.
+Which telecommunications provider suffered a ransomware attack by the Crimson Collective affecting 1 million customers?,Brightspeed.
+What was the operational impact of the March 2026 Stryker cyber attack?,Mass device wipes that forced office shutdowns.
+The 'KadNap' botnet specifically targets which type of hardware to build proxy networks?,ASUS routers and edge devices.
+Which Russian satellite communication system had its internal military data breached by Ukrainian hackers in 2026?,The Gonets system.
+What is the primary objective of 'Software Dependency Poisoning' in supply chain attacks?,Injecting malicious code into open-source repositories to compromise developer environments.
+"The shift in 2026 cyber security strategy prioritises 'cyber resilience', which operates under what core assumption?",The assumption that a network breach is inevitable.
+"In modern cloud environments, what boundary has replaced the traditional network perimeter?",Identity.
+How do 2026 threat actors typically bypass Multi-Factor Authentication (MFA)?,By using infostealer malware to scrape valid session tokens and cookies.
+"What term refers to non-human credentials such as API keys, service accounts, and automation tokens?",Machine identities.
+"In API security, what does the acronym 'BOLA' represent?",Broken Object Level Authorization.
+Why are 'Shadow APIs' considered a significant security vulnerability?,They are undocumented or deprecated interfaces that lack standard security monitoring.
+"In the 'Shared Responsibility Model' of cloud security, who is responsible for securing data and access configurations?",The customer.
+How does a 'Supply Chain Attack' provide an 'extortion multiplier' for ransomware groups?,Compromising one vendor allows attackers to hold the data of hundreds of downstream clients hostage.
+What is the goal of 'Identity Threat Detection and Response' (ITDR)?,Monitoring IAM logs for behavioural anomalies to revoke compromised tokens before lateral movement occurs.
+What is the primary purpose of implementing 'Zero Trust Network Access' (ZTNA)?,To limit the blast radius of an attack once credentials fall into the wrong hands.
+"According to Ronald Ritchey, what are the three main reasons passwords remain the standard authentication method?","They are cheap to use, easy to establish, and the existing standard."
+How does password re-use magnify the risk of a single credential theft?,A compromise in one environment damages the security of all other linked services and accounts.
+What is a major cost driver for moving beyond password-based authentication?,"The requirement for physical infrastructure, such as readers or hardware tokens, for every user."
+Why are smartphones considered a low-cost alternative for high-quality authentication?,Users already own devices with built-in sensors that can host multiple credentials.
+Which smartphone sensor can prevent unattended device access via proximity detection?,The Bluetooth radio.
+What is the function of a 'Liveness' check in biometric systems?,"To ensure the biometric data is being read from a real, live person rather than a recording."
+What are the three primary hurdles facing the deployment of biometric authentication?,"Lack of infrastructure, user acceptance, and privacy concerns."
+How does 'Context-Aware' access decision-making differ from static provisioning?,"It evaluates risk-based factors like location, time, and behaviour at the time of the request."
+What is the central proposal of an 'Identity Ecosystem'?,Establishing identity providers that strongly authenticate individuals on behalf of multiple relying organisations.
+What legal concern acts as a barrier to the emergence of a unified identity ecosystem?,Determining liability for fraudulent logins or revenue loss during identity provider downtime.
+Why might privacy take a 'back seat' to security in future IAM strategies?,"Organisations require more contextual data about users to make valid, risk-based access decisions."
+What trend is driving the increased adoption of federated authentication?,The widespread adoption of cloud services.
+What is the main problem with 'technology-centric' entitlement management?,Entitlement names are often cryptic and bear little relationship to their actual business purpose.
+How does 'business-centric' entitlement management resolve the complexity of access reviews?,By combining individual permissions into high-level functional constructs that map to actual business tasks.
+Modern access governance is moving away from fixed-schedule reviews toward what approach?,Real-time reviews triggered by specific risk-based events.
+Why is Human Resources (HR) increasingly viewed as an insufficient primary source for identity data?,"It often lacks data on contractors, vendors, and other third parties essential to the organisation."
+What is the first step in the IAM Product Selection and Decision Framework?,Collecting and defining requirements from various stakeholders.
+"In IAM selection, what does a 'Requirement Traceability Matrix' help an organisation achieve?",Tracking a requirement from its initial identification through to its final implementation.
+Which requirement category focuses on the backend infrastructure and technical attributes of an IAM tool?,Technical requirements.
+What is the focus of 'Functional' requirements in the IAM selection process?,"The behaviour of the tool, its interface ease, and its ability to perform key processes."
+Which requirement category covers business considerations like vendor support and documentation quality?,Non-functional requirements.
+What is 'Role Engineering' within the context of Identity and Access Management?,The process of defining and building roles to manage access across an enterprise.
+What is the purpose of 'Paper-Based Scoring' during the IAM analysis phase?,To provide a basic level of evaluation before moving into live use-case testing.
+"In IAM TCO analysis, what does the acronym 'TCO' represent?",Total Cost of Ownership.
+Why are client references critical when evaluating an IAM vendor?,They help validate if the product actually performs in a true production environment as advertised.
+"When negotiating with a smaller IAM vendor, what specific protection might a client request?",Placing the product's source code in escrow as a precaution against the vendor going out of business.
+How does 'Attribute-Based Access Control' (ABAC) differ from traditional RBAC?,"It grants access based on characteristics of the user, the resource, and the environment rather than just a role."
+What is the 'Principle of Least Privilege' (PoLP)?,The practice of limiting access rights for users to the bare minimum permissions they need to perform their work.
+What is 'Role-Based Access Control' (RBAC)?,A method of restricting system access to authorised users based on their defined role within an organisation.
+"In the 2026 cyber landscape, what is 'Impossible Travel' in an IAM context?",A behavioural anomaly where a single user credential logs in from geographically distant locations in a short timeframe.
+What is the risk associated with 'Shadow APIs' in microservices architectures?,They provide an invisible backdoor for attackers because they lack standard security monitoring.
+What is the objective of 'Trigona' ransomware campaigns reported in April 2026?,Using custom tools to exfiltrate sensitive data before network encryption occurs.
+Which 2026 incident involved the theft of 150 GB of data from virtual machines at an Indian IT company?,The Sinobi IT attack.
+What is the role of 'WAAP' platforms in modern web security?,Protecting applications and APIs using behavioural analytics rather than static rules.
+How does 'Software Dependency Poisoning' exploit the development process?,By pulling malware directly into build environments when developers update their open-source libraries.
+Why is 'Machine Identity' abuse particularly dangerous for organisations?,"These accounts are often over-privileged, rarely rotated, and lack standard human-user monitoring."
+What is 'Broken Object Level Authorization' (BOLA)?,An API vulnerability where an attacker manipulates requests to access data belonging to other users.
+What is 'Cyber Resilience'?,The ability of an organisation to maintain operations and limit damage under the assumption that it will be breached.
+What is the 'Blast Radius' in a cyber security context?,The potential extent of damage or data access an attacker can achieve once they have successfully breached a system.
+"In Ritchey's predictions, what is the 'Identity Ecosystem' designed to eliminate?","The need for individuals to maintain distinct, high-quality passwords for every site they visit."
+Why does migrating to 'business-centric' entitlements require high-level constructs?,To ensure that managers and users can understand and validate the access being granted without technical expertise.
+"In access governance, what is a 'Transfer Review'?",A risk-based trigger that initiates an access review when an employee moves to a new position within the company.
+How can 'Separation of Duties' (SoD) be compromised over time?,Through the accumulation of entitlements by an employee as they change roles without old permissions being revoked.
+What is the drawback of using 'Time-Based' access reviews?,They often lead to 'rubber-stamping' because they are not tied to specific risk events or triggers.
+What are 'Externalised Access Decision Engines'?,Systems that allow complex access logic to be applied consistently across multiple sets of internal and cloud services.
+"In IAM selection, what is 'Total Cost of Ownership' (TCO)?","The sum of all costs including licensing, hardware, integration, labor, training, and ongoing maintenance."
+Why should an organisation define its 'Use Cases' before final IAM product analysis?,To test the tool against the most critical and important functional requirements of the organisation.
+What advantage do 'established' IAM vendors offer over start-ups during negotiations?,They generally have deeper discount abilities and a wider range of product references.
+What is a 'Non-functional Requirement' in the context of IAM software?,A requirement related to tool operation and business considerations rather than core technical features.
+"In Figure 17.2, which stakeholders are listed under 'Key Stakeholders' for requirement gathering?","Business Units, Technology Groups, Legal, Third Party, Audit, and Risk."
+What is 'Bottom-Up' role mining?,Defining roles based on the analysis of existing permissions currently assigned to users in the system.
+What is 'Top-Down' role engineering?,Defining roles based on business job functions and requirements before mapping them to technical permissions.
+What is the 'Collect' phase of the IAM Product Selection Framework?,The stage of conducting due diligence and gathering requirements to form evaluation criteria.
+"In the future of IAM, why is 'Privacy' described as harder to protect than in the past?","Large-scale data correlation makes it easy to assemble complete personal profiles from small, shared facts."
+What is the primary benefit of 'Federated Authentication' protocols like OAuth and SAML?,They provide a light-weight approach to solving authentication across corporate and cloud environments.
+What is 'Identity Vetting'?,The process of verifying that an individual is who they claim to be before issuing them a high-quality credential.
+What is an 'Identity Provider' in the context of an identity ecosystem?,An entity responsible for strongly authenticating a person and granting access to services on their behalf.
+What is 'Static' access decision-making?,Authorisation that is granted at the time of provisioning and remains unchanged regardless of the request context.
+How can 'GPS Services' on a smartphone enhance authentication security?,By making access decisions based on the physical location of the person requesting the service.
+What is the primary risk of using 'Weak Passwords' for sensitive accounts?,They are easily compromised through phishing attacks or malware on the user's device.
